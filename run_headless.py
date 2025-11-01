@@ -1,4 +1,5 @@
-﻿# run_headless.py
+﻿cd /srv/Dalatrader_V4_clean
+cat > run_headless.py <<'PY'
 import sys, os, datetime, importlib, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent
@@ -6,11 +7,10 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 os.environ.setdefault("PYTHONPATH", str(ROOT))
 
-# gör pages till paket (om någon kör skriptet från annan cwd)
-if not (ROOT / "pages" / "__init__.py").exists():
-    (ROOT / "pages" / "__init__.py").write_text("", encoding="utf-8")
+# gör pages till paket
+(ROOT / "pages" / "__init__.py").write_text("", encoding="utf-8")
 
-# Importera modulen som ett riktigt paket → dataclasses blir nöjd
+# IMPORTERA SOM PAKET (inte via spec/exec_module)
 optmod = importlib.import_module("pages.10_optimizer")
 
 def main():
@@ -42,3 +42,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+PY
